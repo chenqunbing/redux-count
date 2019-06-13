@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {connect} from 'react-redux'
+import { add, reduce} from './actions/index'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+  constructor (prop) {
+    super(prop)
+    this.handleReduce = this.handleReduce.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
+  }
+  handleAdd (){
+    this.props.add()
+  }
+  handleReduce () {
+    this.props.reduce()
+  }
+  render () {
+    const count = this.props.count
+    return (
+      <div className="container">
+        <div className='add' onClick={this.handleReduce}>-</div>
+        <div className='count'>{count}</div>
+        <div className='add' onClick={this.handleAdd}>+</div>
+      </div>
+    )
+  }
+}
+const mapStateToProps = state => {
+  return {
+    count: state.count
+  }
 }
 
-export default App;
+export default connect(
+  mapStateToProps,
+  {add, reduce}
+)(App)
